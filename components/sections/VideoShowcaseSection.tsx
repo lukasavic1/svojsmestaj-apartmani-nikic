@@ -20,16 +20,21 @@ function YouTubeGlyph({ className }: { className?: string }) {
   );
 }
 
-function PlayPulse() {
+function PlayPulse({ size = "lg" }: { size?: "lg" | "sm" }) {
+  const large = size === "lg";
   return (
-    <span className="relative grid size-12 place-items-center sm:size-14">
+    <span className={`relative grid place-items-center ${large ? "size-20" : "size-12"}`}>
       <motion.span
-        className="absolute inset-0 rounded-full bg-[#C5A880]/40"
-        animate={{ scale: [1, 1.35, 1], opacity: [0.55, 0, 0.55] }}
-        transition={{ duration: 2.2, repeat: Infinity, ease: "easeOut" }}
+        className="absolute inset-0 rounded-full bg-[#C5A880]/50"
+        animate={{ scale: [1, 1.15, 1], opacity: [0.8, 1, 0.8] }}
+        transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
       />
-      <span className="relative grid size-11 place-items-center rounded-full bg-[#C5A880] text-navy shadow-lg sm:size-12">
-        <Play className="ml-0.5 size-5 fill-current" />
+      <span
+        className={`relative grid place-items-center rounded-full bg-[#C5A880] text-navy shadow-lg shadow-[#C5A880]/30 ${
+          large ? "size-16" : "size-10"
+        }`}
+      >
+        <Play className={`ml-0.5 fill-current ${large ? "size-7" : "size-4"}`} />
       </span>
     </span>
   );
@@ -53,29 +58,29 @@ export function VideoShowcaseSection() {
           type="button"
           onClick={() => setActive(featuredVideo)}
           aria-label={`${ui.video.play}: ${tx(featuredVideo.title, locale)}`}
-          className="group relative mx-auto mt-8 block w-full max-w-2xl overflow-hidden rounded-2xl shadow-xl shadow-black/40"
+          className="group relative mt-10 block w-full overflow-hidden rounded-3xl shadow-[0_0_50px_rgba(197,168,128,0.15)]"
         >
           <div className="relative aspect-video">
             <Image
               src={featuredVideo.thumbnail}
               alt={tx(featuredVideo.title, locale)}
               fill
-              sizes="(max-width: 768px) 100vw, 672px"
+              sizes="(max-width: 1200px) 100vw, 1200px"
               className="object-cover transition-transform duration-700 group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-navy/45 transition-colors duration-500 group-hover:bg-navy/60" />
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 px-5 text-center">
+            <div className="absolute inset-0 bg-navy/35 transition-colors duration-500 group-hover:bg-navy/50" />
+            <div className="absolute inset-0 flex items-center justify-center">
               <PlayPulse />
-              <div>
-                <p className="font-heading text-lg sm:text-xl">{tx(featuredVideo.title, locale)}</p>
-                <p className="mt-1 text-xs text-white/75 sm:text-sm">
-                  {tx(featuredVideo.subtitle, locale)}
-                </p>
-              </div>
             </div>
-            <span className="absolute top-3 right-3 rounded-full bg-black/55 px-2 py-0.5 text-[0.65rem] font-semibold">
+            <span className="absolute top-4 right-4 rounded-md bg-black/70 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur-sm">
               {featuredVideo.duration}
             </span>
+            <div className="absolute inset-x-3 bottom-3 rounded-2xl border border-white/10 bg-slate-900/75 p-4 backdrop-blur-md md:inset-x-5 md:bottom-5 md:p-6">
+              <p className="font-heading text-xl md:text-3xl">{tx(featuredVideo.title, locale)}</p>
+              <p className="mt-1 text-sm text-white/75 md:text-base">
+                {tx(featuredVideo.subtitle, locale)}
+              </p>
+            </div>
           </div>
         </button>
 
@@ -84,7 +89,7 @@ export function VideoShowcaseSection() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-8% 0px" }}
-          className="-mx-4 mt-6 flex gap-3 overflow-x-auto px-4 pb-2 snap-x snap-mandatory sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0"
+          className="-mx-4 mt-6 flex gap-4 overflow-x-auto px-4 pb-2 snap-x snap-mandatory sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0"
         >
           {reelVideos.map((video) => (
             <motion.button
@@ -93,22 +98,22 @@ export function VideoShowcaseSection() {
               variants={fadeInUp}
               onClick={() => setActive(video)}
               aria-label={`${ui.video.play}: ${tx(video.title, locale)}`}
-              className="group relative w-[78%] shrink-0 snap-start overflow-hidden rounded-2xl text-left sm:w-auto"
+              className="group relative w-[80%] shrink-0 snap-start overflow-hidden rounded-2xl border border-transparent text-left transition hover:border-[#C5A880]/40 sm:w-auto"
             >
-              <div className="relative aspect-video">
+              <div className="relative aspect-video overflow-hidden">
                 <Image
                   src={video.thumbnail}
                   alt={tx(video.title, locale)}
                   fill
                   sizes="(max-width: 640px) 80vw, 33vw"
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-navy/35 transition-colors group-hover:bg-navy/50" />
-                <span className="absolute top-3 right-3 rounded-full bg-black/55 px-2 py-0.5 text-[0.65rem] font-semibold">
+                <div className="absolute inset-0 bg-navy/30 transition-colors group-hover:bg-navy/15" />
+                <span className="absolute top-3 right-3 rounded-md bg-black/70 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur-sm">
                   {video.duration}
                 </span>
-                <span className="absolute top-1/2 left-1/2 grid size-11 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-[#C5A880] text-navy">
-                  <Play className="ml-0.5 size-4 fill-current" />
+                <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-90 transition group-hover:scale-110 group-hover:opacity-100">
+                  <PlayPulse size="sm" />
                 </span>
               </div>
               <div className="bg-white/5 px-3 py-3 backdrop-blur-md">
