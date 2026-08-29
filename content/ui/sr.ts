@@ -138,6 +138,7 @@ export const uiSr: UiDictionary = {
     stepDetails: "Podaci",
     next: "Dalje",
     back: "Nazad",
+    cancel: "Otkaži",
   },
   video: {
     kicker: "YouTube",

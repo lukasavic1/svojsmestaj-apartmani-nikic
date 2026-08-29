@@ -9,6 +9,7 @@ import { LanguageToggle } from "@/components/ui/LanguageToggle";
 import { WhatsAppIcon } from "@/components/ui/SocialIcons";
 import { useSite } from "@/components/providers/SiteProvider";
 import { useIsClient } from "@/hooks/useIsClient";
+import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
 import { site } from "@/data/site";
 import { media } from "@/data/media";
 import { withLang } from "@/lib/paths";
@@ -30,29 +31,16 @@ export function SiteHeader({ solid = false }: { solid?: boolean }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuId = useId();
   const closeRef = useRef<HTMLButtonElement>(null);
+  useBodyScrollLock(menuOpen);
 
   useEffect(() => {
     if (!menuOpen) return;
-    const scrollY = window.scrollY;
-    const { style } = document.body;
-    const prev = { overflow: style.overflow, position: style.position, top: style.top, width: style.width };
-    style.overflow = "hidden";
-    style.position = "fixed";
-    style.top = `-${scrollY}px`;
-    style.width = "100%";
     closeRef.current?.focus({ preventScroll: true });
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setMenuOpen(false);
     };
     document.addEventListener("keydown", onKey);
-    return () => {
-      style.overflow = prev.overflow;
-      style.position = prev.position;
-      style.top = prev.top;
-      style.width = prev.width;
-      window.scrollTo({ top: scrollY, left: 0, behavior: "instant" });
-      document.removeEventListener("keydown", onKey);
-    };
+    return () => document.removeEventListener("keydown", onKey);
   }, [menuOpen]);
 
   const inverted = !solid && !stuck && !menuOpen;

@@ -9,6 +9,7 @@ import { telHref, whatsappHref } from "@/lib/whatsapp";
 import { WhatsAppIcon } from "@/components/ui/SocialIcons";
 import { easeOutExpo } from "@/lib/motion";
 import { useIsClient } from "@/hooks/useIsClient";
+import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
 import { useSite } from "@/components/providers/SiteProvider";
 
 export type BookingReceipt = {
@@ -27,28 +28,15 @@ type Props = {
 export function BookingSuccessModal({ open, receipt, onClose }: Props) {
   const { ui } = useSite();
   const mounted = useIsClient();
+  useBodyScrollLock(open);
 
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
-    const scrollY = window.scrollY;
-    const { style } = document.body;
-    const prev = { overflow: style.overflow, position: style.position, top: style.top, width: style.width };
-    style.overflow = "hidden";
-    style.position = "fixed";
-    style.top = `-${scrollY}px`;
-    style.width = "100%";
     document.addEventListener("keydown", onKey);
-    return () => {
-      style.overflow = prev.overflow;
-      style.position = prev.position;
-      style.top = prev.top;
-      style.width = prev.width;
-      window.scrollTo({ top: scrollY, left: 0, behavior: "instant" });
-      document.removeEventListener("keydown", onKey);
-    };
+    return () => document.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
   if (!mounted) return null;

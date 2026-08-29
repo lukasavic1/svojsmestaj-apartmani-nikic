@@ -1,11 +1,12 @@
 "use client";
 
-import { useLayoutEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 import { easeOutExpo } from "@/lib/motion";
 import { useIsClient } from "@/hooks/useIsClient";
+import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
 
 type Props = {
   open: boolean;
@@ -18,34 +19,16 @@ type Props = {
 export function VideoModal({ open, youtubeId, title, onClose, closeLabel }: Props) {
   const closeRef = useRef<HTMLButtonElement>(null);
   const mounted = useIsClient();
+  useBodyScrollLock(open);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!open) return;
-    const scrollY = window.scrollY;
-    const { style } = document.body;
-    const prev = {
-      overflow: style.overflow,
-      position: style.position,
-      top: style.top,
-      width: style.width,
-    };
-    style.overflow = "hidden";
-    style.position = "fixed";
-    style.top = `-${scrollY}px`;
-    style.width = "100%";
     closeRef.current?.focus({ preventScroll: true });
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
     document.addEventListener("keydown", onKey);
-    return () => {
-      style.overflow = prev.overflow;
-      style.position = prev.position;
-      style.top = prev.top;
-      style.width = prev.width;
-      window.scrollTo({ top: scrollY, left: 0, behavior: "instant" });
-      document.removeEventListener("keydown", onKey);
-    };
+    return () => document.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
   if (!mounted) return null;

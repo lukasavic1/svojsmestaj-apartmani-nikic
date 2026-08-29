@@ -9,6 +9,7 @@ import type { Photo } from "@/types/apartment";
 import { tx } from "@/lib/i18n";
 import { useSwipeIndex } from "@/hooks/useSwipeIndex";
 import { useIsClient } from "@/hooks/useIsClient";
+import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
 import { useSite } from "@/components/providers/SiteProvider";
 
 type Props = {
@@ -44,30 +45,17 @@ export function GalleryLightbox({
   );
 
   useSwipeIndex(stageRef, { count, onSwipe: step });
+  useBodyScrollLock(open);
 
   useEffect(() => {
     if (!open) return;
-    const scrollY = window.scrollY;
-    const { style } = document.body;
-    const prev = { overflow: style.overflow, position: style.position, top: style.top, width: style.width };
-    style.overflow = "hidden";
-    style.position = "fixed";
-    style.top = `-${scrollY}px`;
-    style.width = "100%";
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
       if (e.key === "ArrowRight") step(1);
       if (e.key === "ArrowLeft") step(-1);
     };
     document.addEventListener("keydown", onKey);
-    return () => {
-      style.overflow = prev.overflow;
-      style.position = prev.position;
-      style.top = prev.top;
-      style.width = prev.width;
-      window.scrollTo({ top: scrollY, left: 0, behavior: "instant" });
-      document.removeEventListener("keydown", onKey);
-    };
+    return () => document.removeEventListener("keydown", onKey);
   }, [open, onClose, step]);
 
   if (!mounted) return null;

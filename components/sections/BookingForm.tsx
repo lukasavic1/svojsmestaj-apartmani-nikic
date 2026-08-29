@@ -37,7 +37,8 @@ function Notice({ children }: { children: string }) {
 }
 
 type Props = {
-  onSuccess?: () => void;
+  onSubmitted?: (receipt: BookingReceipt) => void;
+  onCancel?: () => void;
   lockedApartmentId?: string;
   stickyTopClass?: string;
 };
@@ -60,7 +61,8 @@ function scrollableAncestor(el: HTMLElement | null): HTMLElement | null {
 }
 
 export function BookingForm({
-  onSuccess,
+  onSubmitted,
+  onCancel,
   lockedApartmentId,
   stickyTopClass = "top-[4.35rem] sm:top-[4.6rem]",
 }: Props) {
@@ -186,7 +188,7 @@ export function BookingForm({
     }
 
     const apartmentName = selected ? tx(selected.name, locale) : values.apartmentId;
-    setReceipt({
+    const next: BookingReceipt = {
       apartmentName,
       period:
         values.checkIn && values.checkOut
@@ -200,7 +202,12 @@ export function BookingForm({
         },
         locale
       ),
-    });
+    };
+    if (onSubmitted) {
+      onSubmitted(next);
+      return;
+    }
+    setReceipt(next);
   };
 
   const dismissSuccess = () => {
@@ -216,7 +223,6 @@ export function BookingForm({
       message: "",
     });
     setStep(lockedApartmentId ? 2 : 1);
-    onSuccess?.();
   };
 
   const steps: { n: Step; label: string }[] = [
@@ -471,14 +477,23 @@ export function BookingForm({
 
         <div className="sticky bottom-0 z-20 grid grid-cols-2 gap-2 border-t border-slate-100 bg-white/95 px-4 py-3 backdrop-blur-md sm:px-8">
           {step === 1 && !lockedApartmentId ? (
-            <button
-              type="button"
-              onClick={() => canAdvanceDates && setStep(2)}
-              disabled={!canAdvanceDates}
-              className={`${btnPrimary} col-span-2`}
-            >
-              {ui.booking.next}
-            </button>
+            <>
+              {onCancel ? (
+                <button type="button" onClick={onCancel} className={btnGhost}>
+                  {ui.booking.cancel}
+                </button>
+              ) : (
+                <span />
+              )}
+              <button
+                type="button"
+                onClick={() => canAdvanceDates && setStep(2)}
+                disabled={!canAdvanceDates}
+                className={btnPrimary}
+              >
+                {ui.booking.next}
+              </button>
+            </>
           ) : null}
           {step === 2 ? (
             <>
@@ -516,7 +531,9 @@ export function BookingForm({
         </div>
       </form>
 
-      <BookingSuccessModal open={Boolean(receipt)} receipt={receipt} onClose={dismissSuccess} />
+      {onSubmitted ? null : (
+        <BookingSuccessModal open={Boolean(receipt)} receipt={receipt} onClose={dismissSuccess} />
+      )}
     </>
   );
 }

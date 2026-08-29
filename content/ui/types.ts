@@ -132,6 +132,7 @@ export type UiDictionary = {
     stepDetails: string;
     next: string;
     back: string;
+    cancel: string;
   };
   video: {
     kicker: string;

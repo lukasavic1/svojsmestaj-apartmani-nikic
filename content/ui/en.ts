@@ -138,6 +138,7 @@ export const uiEn: UiDictionary = {
     stepDetails: "Details",
     next: "Next",
     back: "Back",
+    cancel: "Cancel",
   },
   video: {
     kicker: "YouTube",
