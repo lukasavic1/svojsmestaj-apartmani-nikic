@@ -4,17 +4,17 @@ import { useEffect, useMemo } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { apartments, getApartment } from "@/data/apartments";
+import { getMockAvailability } from "@/data/mock-availability";
 import { site } from "@/data/site";
 import { createBookingSchema, type BookingValues } from "@/lib/booking-schema";
 import { formatInquiryMessage, whatsappHref } from "@/lib/whatsapp";
 import { rangeHasBookedNight } from "@/lib/calendar";
 import { tx } from "@/lib/i18n";
-import { useAvailability } from "@/hooks/useAvailability";
 import { useSite } from "@/components/providers/SiteProvider";
 import { RangeCalendar } from "@/components/ui/RangeCalendar";
 
 const fieldClass =
-  "mt-1.5 h-12 w-full rounded-2xl border border-navy/10 bg-white px-4 text-sm text-ink outline-none transition focus:border-gold";
+  "mt-1.5 h-11 w-full rounded-xl border border-navy/10 bg-white px-3 text-sm text-ink outline-none transition focus:border-gold";
 
 type Props = {
   onSuccess?: () => void;
@@ -67,19 +67,25 @@ export function BookingForm({ onSuccess, lockedApartmentId }: Props) {
   const checkIn = useWatch({ control, name: "checkIn" });
   const checkOut = useWatch({ control, name: "checkOut" });
   const unit = getApartment(apartmentId);
-  const { data: availability, loading, error } = useAvailability(apartmentId);
+  const availability = getMockAvailability(apartmentId || apartments[0].id);
+
   useEffect(() => {
     if (lockedApartmentId && apartmentId !== lockedApartmentId) {
       setValue("apartmentId", lockedApartmentId);
     }
   }, [apartmentId, lockedApartmentId, setValue]);
 
+  const pickUnit = (id: string) => {
+    setValue("apartmentId", id, { shouldValidate: true });
+    setValue("checkIn", "");
+    setValue("checkOut", "");
+  };
+
   const onSubmit = (values: BookingValues) => {
     const selected = getApartment(values.apartmentId);
     if (
       selected &&
       !selected.fullyBooked &&
-      availability &&
       values.checkIn &&
       values.checkOut &&
       rangeHasBookedNight(availability.booked, values.checkIn, values.checkOut)
@@ -103,14 +109,14 @@ export function BookingForm({ onSuccess, lockedApartmentId }: Props) {
 
   if (isSubmitSuccessful) {
     return (
-      <div className="rounded-3xl bg-cream px-6 py-10 text-center">
-        <p className="font-heading text-3xl text-ink">{ui.booking.successTitle}</p>
-        <p className="mx-auto mt-3 max-w-md text-muted">{ui.booking.successBody}</p>
+      <div className="rounded-2xl bg-cream px-5 py-8 text-center">
+        <p className="font-heading text-2xl text-ink">{ui.booking.successTitle}</p>
+        <p className="mx-auto mt-2 max-w-md text-sm text-muted">{ui.booking.successBody}</p>
         <a
           href={whatsappHref()}
           target="_blank"
           rel="noreferrer"
-          className="mt-6 inline-flex h-12 items-center rounded-full bg-navy px-6 text-[0.75rem] font-semibold tracking-[0.12em] text-white uppercase"
+          className="mt-5 inline-flex h-11 items-center rounded-full bg-navy px-5 text-[0.72rem] font-semibold tracking-[0.12em] text-white uppercase"
         >
           {ui.booking.whatsapp}
         </a>
@@ -119,35 +125,53 @@ export function BookingForm({ onSuccess, lockedApartmentId }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4 sm:grid-cols-2">
+    <form onSubmit={handleSubmit(onSubmit)} className="grid gap-3">
+      {!lockedApartmentId ? (
+        <div>
+          <p className="mb-2 text-xs font-semibold tracking-[0.12em] text-muted uppercase">
+            1. {ui.booking.apartment}
+          </p>
+          <div className="flex flex-wrap gap-1.5">
+            {apartments.map((item) => {
+              const active = apartmentId === item.id;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => pickUnit(item.id)}
+                  className={`h-9 rounded-full px-3 text-[0.7rem] font-semibold tracking-wide ${
+                    active ? "bg-navy text-white" : "bg-warm text-ink/70 hover:text-ink"
+                  }`}
+                >
+                  {tx(item.name, locale)}
+                  {item.fullyBooked ? ` · ${ui.apartments.occupied}` : ""}
+                </button>
+              );
+            })}
+          </div>
+          <input type="hidden" {...register("apartmentId")} />
+          {errors.apartmentId ? (
+            <span className="mt-1 block text-xs text-red-700">{errors.apartmentId.message}</span>
+          ) : null}
+        </div>
+      ) : (
+        <input type="hidden" {...register("apartmentId")} />
+      )}
+
       {unit?.fullyBooked ? (
-        <div className="rounded-2xl border border-[#eaadad] bg-[#eaadad]/20 px-4 py-3 sm:col-span-2">
-          <p className="text-[0.72rem] font-semibold tracking-[0.14em] text-red-800 uppercase">
+        <div className="rounded-xl border border-[#eaadad] bg-[#eaadad]/20 px-3 py-2">
+          <p className="text-[0.68rem] font-semibold tracking-[0.12em] text-red-800 uppercase">
             {ui.calendar.occupiedBanner}
           </p>
-          <p className="mt-1 text-sm text-ink/80">{ui.calendar.occupiedBody}</p>
         </div>
-      ) : loading ? (
-        <p className="text-sm text-muted sm:col-span-2">{ui.calendar.loading}</p>
-      ) : error ? (
-        <div className="grid gap-4 sm:col-span-2 sm:grid-cols-2">
-          <p className="text-sm text-muted sm:col-span-2">{ui.calendar.unavailable}</p>
-          <label className="block text-sm font-medium text-ink">
-            {ui.booking.checkIn}
-            <input className={fieldClass} type="date" {...register("checkIn")} />
-          </label>
-          <label className="block text-sm font-medium text-ink">
-            {ui.booking.checkOut}
-            <input className={fieldClass} type="date" {...register("checkOut")} />
-          </label>
-        </div>
-      ) : availability ? (
-        <div className="sm:col-span-2">
-          <p className="mb-2 text-sm font-medium text-ink">
-            {ui.apartments.availability}
+      ) : (
+        <div>
+          <p className="mb-2 text-xs font-semibold tracking-[0.12em] text-muted uppercase">
+            2. {ui.apartments.availability}
             {unit ? ` · ${tx(unit.name, locale)}` : ""}
           </p>
           <RangeCalendar
+            key={apartmentId}
             availability={availability}
             checkIn={checkIn || null}
             checkOut={checkOut || null}
@@ -163,77 +187,48 @@ export function BookingForm({ onSuccess, lockedApartmentId }: Props) {
             <span className="mt-1 block text-xs text-red-700">{errors.checkOut.message}</span>
           ) : null}
         </div>
-      ) : null}
+      )}
 
-      <label className="block text-sm font-medium text-ink">
-        {ui.booking.name}
-        <input className={fieldClass} autoComplete="name" {...register("name")} />
-        {errors.name ? <span className="mt-1 block text-xs text-red-700">{errors.name.message}</span> : null}
-      </label>
-      <label className="block text-sm font-medium text-ink">
-        {ui.booking.email}
-        <input className={fieldClass} type="email" autoComplete="email" {...register("email")} />
-        {errors.email ? <span className="mt-1 block text-xs text-red-700">{errors.email.message}</span> : null}
-      </label>
-      <label className="block text-sm font-medium text-ink sm:col-span-2">
-        {ui.booking.phone}
-        <input className={fieldClass} type="tel" autoComplete="tel" {...register("phone")} />
-        {errors.phone ? <span className="mt-1 block text-xs text-red-700">{errors.phone.message}</span> : null}
-      </label>
-      {lockedApartmentId ? (
-        <div className="block text-sm font-medium text-ink">
-          {ui.booking.apartment}
-          <p className="mt-1.5 flex h-12 items-center rounded-2xl border border-navy/10 bg-warm px-4 text-sm">
-            {unit ? tx(unit.name, locale) : lockedApartmentId}
-          </p>
-          <input type="hidden" {...register("apartmentId")} />
-        </div>
-      ) : (
+      <p className="text-xs font-semibold tracking-[0.12em] text-muted uppercase">
+        3. {ui.booking.submit}
+      </p>
+      <div className="grid gap-3 sm:grid-cols-2">
         <label className="block text-sm font-medium text-ink">
-          {ui.booking.apartment}
-          <select
-            className={fieldClass}
-            {...register("apartmentId", {
-              onChange: () => {
-                setValue("checkIn", "");
-                setValue("checkOut", "");
-              },
-            })}
-          >
-            <option value="">{ui.booking.selectApartment}</option>
-            {apartments.map((item) => (
-              <option key={item.id} value={item.id}>
-                {tx(item.name, locale)} · {item.capacity} {ui.apartments.capacity}
-                {item.fullyBooked ? ` · ${ui.apartments.occupied}` : ""}
-              </option>
-            ))}
-          </select>
-          {errors.apartmentId ? (
-            <span className="mt-1 block text-xs text-red-700">{errors.apartmentId.message}</span>
+          {ui.booking.name}
+          <input className={fieldClass} autoComplete="name" {...register("name")} />
+          {errors.name ? <span className="mt-1 block text-xs text-red-700">{errors.name.message}</span> : null}
+        </label>
+        <label className="block text-sm font-medium text-ink">
+          {ui.booking.phone}
+          <input className={fieldClass} type="tel" autoComplete="tel" {...register("phone")} />
+          {errors.phone ? <span className="mt-1 block text-xs text-red-700">{errors.phone.message}</span> : null}
+        </label>
+        <label className="block text-sm font-medium text-ink">
+          {ui.booking.email}
+          <input className={fieldClass} type="email" autoComplete="email" {...register("email")} />
+          {errors.email ? <span className="mt-1 block text-xs text-red-700">{errors.email.message}</span> : null}
+        </label>
+        <label className="block text-sm font-medium text-ink">
+          {ui.booking.guests}
+          <input className={fieldClass} type="number" min={1} max={unit?.capacity ?? 5} {...register("guests", { valueAsNumber: true })} />
+          {errors.guests ? (
+            <span className="mt-1 block text-xs text-red-700">{errors.guests.message}</span>
           ) : null}
         </label>
-      )}
+      </div>
       <label className="block text-sm font-medium text-ink">
-        {ui.booking.guests}
-        <input className={fieldClass} type="number" min={1} max={5} {...register("guests", { valueAsNumber: true })} />
-        {errors.guests ? (
-          <span className="mt-1 block text-xs text-red-700">{errors.guests.message}</span>
-        ) : null}
-      </label>
-      <label className="block text-sm font-medium text-ink sm:col-span-2">
         {ui.booking.message}
         <textarea
-          rows={4}
+          rows={2}
           placeholder={ui.booking.messageHint}
-          className="mt-1.5 w-full rounded-2xl border border-navy/10 bg-white px-4 py-3 text-sm text-ink outline-none transition focus:border-gold"
+          className="mt-1.5 w-full rounded-xl border border-navy/10 bg-white px-3 py-2 text-sm text-ink outline-none transition focus:border-gold"
           {...register("message")}
         />
       </label>
-      <p className="text-xs leading-relaxed text-muted sm:col-span-2">{ui.booking.note}</p>
-      <div className="flex flex-col gap-3 sm:col-span-2 sm:flex-row">
+      <div className="flex flex-col gap-2 sm:flex-row">
         <button
           type="submit"
-          className="inline-flex h-12 flex-1 items-center justify-center rounded-full bg-navy text-[0.75rem] font-semibold tracking-[0.14em] text-white uppercase hover:bg-gold-deep"
+          className="inline-flex h-11 flex-1 items-center justify-center rounded-full bg-navy text-[0.72rem] font-semibold tracking-[0.12em] text-white uppercase hover:bg-gold-deep"
         >
           {ui.booking.submit}
         </button>
@@ -241,7 +236,7 @@ export function BookingForm({ onSuccess, lockedApartmentId }: Props) {
           href={whatsappHref()}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex h-12 flex-1 items-center justify-center rounded-full border border-navy/15 text-[0.75rem] font-semibold tracking-[0.14em] uppercase hover:border-gold"
+          className="inline-flex h-11 flex-1 items-center justify-center rounded-full border border-navy/15 text-[0.72rem] font-semibold tracking-[0.12em] uppercase hover:border-gold"
         >
           {ui.booking.whatsapp} · {site.contact.phoneDisplay}
         </a>

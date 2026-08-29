@@ -2,7 +2,7 @@ import type { UiDictionary } from "./types";
 
 export const uiEn: UiDictionary = {
   nav: {
-    apartments: "Our apartments",
+    apartments: "Apartments",
     location: "Where we are",
     about: "About us",
     reviews: "Reviews",
@@ -43,7 +43,7 @@ export const uiEn: UiDictionary = {
     bathrooms: "Bathrooms",
     beds: "Beds",
     close: "Close",
-    gallery: "Apartment gallery",
+    gallery: "Gallery",
     prev: "Previous photo",
     next: "Next photo",
     occupied: "Occupied",
@@ -88,8 +88,8 @@ export const uiEn: UiDictionary = {
   },
   booking: {
     kicker: "Direct booking",
-    heading: "Book your summer in Tivat in time.",
-    lead: "Dates fill quickly. Write to us. When you write or call, Irena answers.",
+    heading: "Book your stay",
+    lead: "Pick an apartment, choose dates, then write to us. Irena answers.",
     name: "Full name",
     email: "Email",
     phone: "Phone / WhatsApp",

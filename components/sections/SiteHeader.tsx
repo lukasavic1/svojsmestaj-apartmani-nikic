@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { Menu, Phone, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import { LanguageToggle } from "@/components/ui/LanguageToggle";
 import { useSite } from "@/components/providers/SiteProvider";
@@ -11,7 +11,7 @@ import { useIsClient } from "@/hooks/useIsClient";
 import { site } from "@/data/site";
 import { media } from "@/data/media";
 import { withLang } from "@/lib/paths";
-import { telHref, whatsappHref } from "@/lib/whatsapp";
+import { whatsappHref } from "@/lib/whatsapp";
 
 function WhatsAppGlyph({ className }: { className?: string }) {
   return (
@@ -66,10 +66,8 @@ export function SiteHeader({ solid = false }: { solid?: boolean }) {
   const home = withLang("/", locale);
 
   const nav = [
-    { href: withLang("/#apartmani", locale), label: ui.nav.apartments },
-    { href: withLang("/#lokacija", locale), label: ui.nav.location },
     { href: withLang("/#o-nama", locale), label: ui.nav.about },
-    { href: withLang("/#utisci", locale), label: ui.nav.reviews },
+    { href: withLang("/#apartmani", locale), label: ui.nav.apartments },
     { href: withLang("/#kontakt", locale), label: ui.nav.contact },
   ];
 
@@ -92,7 +90,6 @@ export function SiteHeader({ solid = false }: { solid?: boolean }) {
               width={80}
               height={80}
               className="h-9 w-9 object-contain"
-              unoptimized
             />
           </span>
           <span className="min-w-0">
@@ -129,15 +126,6 @@ export function SiteHeader({ solid = false }: { solid?: boolean }) {
 
         <div className="flex items-center gap-1 sm:gap-2">
           <LanguageToggle inverted={inverted} />
-          <a
-            href={telHref()}
-            className={`hidden h-11 items-center gap-2 rounded-full px-3 text-[0.72rem] font-semibold tracking-[0.08em] uppercase xl:inline-flex ${
-              inverted ? "text-white/90 hover:bg-white/10" : "text-ink/80 hover:bg-navy/5"
-            }`}
-          >
-            <Phone className="size-3.5" />
-            {ui.nav.call}
-          </a>
           <a
             href={whatsappHref()}
             target="_blank"

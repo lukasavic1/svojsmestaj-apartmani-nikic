@@ -4,7 +4,7 @@ export type Locale = (typeof LOCALES)[number];
 export const DEFAULT_LOCALE: Locale = "sr";
 
 export const LOCALE_LABELS: Record<Locale, string> = {
-  sr: "SRB",
+  sr: "MNE",
   en: "ENG",
 };
 

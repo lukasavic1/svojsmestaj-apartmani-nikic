@@ -13,7 +13,7 @@ export function LocationSection() {
   const { locale, ui } = useSite();
 
   return (
-    <section id="lokacija" className="bg-navy px-4 py-20 text-white sm:px-6 lg:px-8 lg:py-28">
+    <section id="lokacija" className="bg-navy px-4 py-12 text-white sm:px-6 lg:px-8 lg:py-16">
       <div className="mx-auto grid max-w-[1200px] gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
         <div>
           <SectionHeading

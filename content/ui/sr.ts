@@ -2,7 +2,7 @@ import type { UiDictionary } from "./types";
 
 export const uiSr: UiDictionary = {
   nav: {
-    apartments: "Naši apartmani",
+    apartments: "Apartmani",
     location: "Gdje se nalazimo?",
     about: "O nama",
     reviews: "Utisci",
@@ -43,7 +43,7 @@ export const uiSr: UiDictionary = {
     bathrooms: "Kupatila",
     beds: "Ležaja",
     close: "Zatvori",
-    gallery: "Galerija apartmana",
+    gallery: "Galerija",
     prev: "Prethodna fotografija",
     next: "Sljedeća fotografija",
     occupied: "Zauzet",
@@ -88,8 +88,8 @@ export const uiSr: UiDictionary = {
   },
   booking: {
     kicker: "Direktna rezervacija",
-    heading: "Rezervišite na vrijeme vaše ljeto u Tivtu.",
-    lead: "Termini se brzo popunjavaju. Javite nam se. Kad nam pišete ili nas zovete javlja se Irena.",
+    heading: "Rezervišite boravak",
+    lead: "Odaberite apartman, termine, pa nam pišite. Javlja se Irena.",
     name: "Ime i prezime",
     email: "E-mail",
     phone: "Telefon / WhatsApp",

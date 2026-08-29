@@ -16,9 +16,9 @@ export function PropertySite() {
       <main>
         <HeroSection />
         <FeatureBar />
+        <AboutSection />
         <ApartmentsSection />
         <AmenitiesSection />
-        <AboutSection />
         <LocationSection />
         <ReviewsSection />
         <BookingSection />

@@ -11,10 +11,12 @@ import { amenityLabel, AmenityIcon } from "@/components/ui/AmenityIcon";
 import { PhotoCarousel } from "@/components/ui/PhotoCarousel";
 import { useSite } from "@/components/providers/SiteProvider";
 import { BookingForm } from "@/components/sections/BookingForm";
+import { GalleryLightbox } from "@/components/ui/GalleryLightbox";
 
 export function ApartmentView({ apartment }: { apartment: Apartment }) {
   const { locale, ui } = useSite();
   const [active, setActive] = useState(0);
+  const [galleryOpen, setGalleryOpen] = useState(false);
   const price =
     apartment.fullyBooked || apartment.pricePerNight == null
       ? ui.apartments.occupied
@@ -62,6 +64,7 @@ export function ApartmentView({ apartment }: { apartment: Apartment }) {
                 priority
                 index={active}
                 onIndexChange={setActive}
+                onImageClick={() => setGalleryOpen(true)}
               />
             </div>
             <div className="mt-3 grid grid-cols-4 gap-2 sm:grid-cols-6">
@@ -69,7 +72,10 @@ export function ApartmentView({ apartment }: { apartment: Apartment }) {
                 <button
                   key={`${photo.src}-${i}`}
                   type="button"
-                  onClick={() => setActive(i)}
+                  onClick={() => {
+                    setActive(i);
+                    setGalleryOpen(true);
+                  }}
                   className={`relative aspect-square overflow-hidden rounded-xl ring-2 ${
                     i === active ? "ring-gold" : "ring-transparent"
                   }`}
@@ -79,7 +85,6 @@ export function ApartmentView({ apartment }: { apartment: Apartment }) {
                     alt={tx(photo.alt, locale)}
                     fill
                     sizes="120px"
-                    unoptimized
                     className="object-cover"
                   />
                 </button>
@@ -151,8 +156,13 @@ export function ApartmentView({ apartment }: { apartment: Apartment }) {
           </p>
           <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
             {apartment.photos.map((photo, i) => (
-              <div
+              <button
                 key={`grid-${photo.src}-${i}`}
+                type="button"
+                onClick={() => {
+                  setActive(i);
+                  setGalleryOpen(true);
+                }}
                 className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-navy/5"
               >
                 <Image
@@ -160,14 +170,21 @@ export function ApartmentView({ apartment }: { apartment: Apartment }) {
                   alt={tx(photo.alt, locale)}
                   fill
                   sizes="(max-width: 768px) 50vw, 25vw"
-                  unoptimized
                   className="object-cover"
                 />
-              </div>
+              </button>
             ))}
           </div>
         </section>
       </div>
+
+      <GalleryLightbox
+        open={galleryOpen}
+        title={tx(apartment.name, locale)}
+        photos={apartment.photos}
+        startIndex={active}
+        onClose={() => setGalleryOpen(false)}
+      />
     </article>
   );
 }

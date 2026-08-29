@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { AvailabilityPayload, YearMonth } from "@/types/calendar";
 import {
   asMonthIndex,
@@ -38,6 +38,11 @@ export function RangeCalendar({
   const [cursor, setCursor] = useState<YearMonth>(availability.first);
   const [error, setError] = useState<string | null>(null);
   const today = todayIso();
+
+  useEffect(() => {
+    setCursor(availability.first);
+    setError(null);
+  }, [availability.unitId, availability.first.year, availability.first.month]);
 
   const { year, month } = cursor;
   const totalDays = daysInMonth(year, month);
@@ -86,9 +91,9 @@ export function RangeCalendar({
   };
 
   return (
-    <div className="rounded-3xl border border-navy/8 bg-cream/80 p-4 sm:p-5">
+    <div className="rounded-2xl border border-navy/8 bg-cream/80 p-3 sm:p-4">
       <div className="flex items-center justify-between gap-3">
-        <h3 id="range-cal-month" className="font-heading text-xl text-ink">
+        <h3 id="range-cal-month" className="font-heading text-lg text-ink">
           {ui.calendar.months[month]} {year}.
         </h3>
         <div className="flex gap-1">
@@ -121,7 +126,7 @@ export function RangeCalendar({
       ) : null}
 
       <div
-        className="mt-4 grid grid-cols-7 gap-1"
+        className="mt-3 grid grid-cols-7 gap-0.5"
         role="grid"
         aria-labelledby="range-cal-month"
       >
@@ -158,7 +163,7 @@ export function RangeCalendar({
                 booked ? ui.calendar.busy : ui.calendar.free
               }`}
               onClick={() => pick(iso, booked)}
-              className={`grid aspect-square place-items-center rounded-xl text-sm font-medium transition ${
+              className={`grid aspect-square place-items-center rounded-lg text-xs font-medium transition ${
                 booked
                   ? "bg-[#eaadad]/80 text-ink/70 line-through"
                   : past

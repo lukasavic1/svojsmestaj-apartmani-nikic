@@ -18,6 +18,7 @@ type Props = {
   priority?: boolean;
   index?: number;
   onIndexChange?: (index: number) => void;
+  onImageClick?: () => void;
 };
 
 export function PhotoCarousel({
@@ -30,6 +31,7 @@ export function PhotoCarousel({
   priority = false,
   index: controlledIndex,
   onIndexChange,
+  onImageClick,
 }: Props) {
   const [uncontrolled, setUncontrolled] = useState(0);
   const index = controlledIndex ?? uncontrolled;
@@ -63,15 +65,18 @@ export function PhotoCarousel({
         fill
         sizes={sizes}
         priority={priority}
-        unoptimized
-        className="object-cover transition-transform duration-700 hover:scale-105"
+        className={`object-cover transition-transform duration-700 ${onImageClick ? "cursor-zoom-in" : "hover:scale-105"}`}
+        onClick={onImageClick}
       />
       {count > 1 ? (
         <>
           <button
             type="button"
             aria-label={prevLabel}
-            onClick={() => step(-1)}
+            onClick={(e) => {
+              e.stopPropagation();
+              step(-1);
+            }}
             className="absolute top-1/2 left-2 z-10 grid size-9 -translate-y-1/2 place-items-center rounded-full bg-white/80 text-ink shadow-md backdrop-blur-md"
           >
             <ChevronLeft className="size-4" />
@@ -79,7 +84,10 @@ export function PhotoCarousel({
           <button
             type="button"
             aria-label={nextLabel}
-            onClick={() => step(1)}
+            onClick={(e) => {
+              e.stopPropagation();
+              step(1);
+            }}
             className="absolute top-1/2 right-2 z-10 grid size-9 -translate-y-1/2 place-items-center rounded-full bg-white/80 text-ink shadow-md backdrop-blur-md"
           >
             <ChevronRight className="size-4" />
@@ -91,7 +99,10 @@ export function PhotoCarousel({
                   key={`${photo.src}-${i}`}
                   type="button"
                   aria-label={`${i + 1}`}
-                  onClick={() => setIndex(i)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIndex(i);
+                  }}
                   className={`h-1.5 rounded-full transition-all ${
                     i === index ? "w-5 bg-white" : "w-1.5 bg-white/50"
                   }`}

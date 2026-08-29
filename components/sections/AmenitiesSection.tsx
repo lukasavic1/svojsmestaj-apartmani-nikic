@@ -12,7 +12,7 @@ export function AmenitiesSection() {
   const { locale, ui } = useSite();
 
   return (
-    <section className="bg-warm px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+    <section className="bg-warm px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
       <div className="mx-auto max-w-[1200px]">
         <SectionHeading
           kicker={ui.amenities.kicker}
@@ -24,23 +24,21 @@ export function AmenitiesSection() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-8% 0px" }}
-          className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+          className="mt-8 grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
         >
           {highlights.map((item) => (
             <motion.article
               key={item.id}
               variants={fadeInUp}
-              className="rounded-3xl bg-white p-6 shadow-xl shadow-slate-200/50"
+              className="flex items-center gap-3 rounded-2xl bg-white px-3 py-2.5 shadow-sm"
             >
-              <span className="grid size-12 place-items-center rounded-2xl bg-cream text-gold-deep">
-                <AmenityIcon name={item.icon} className="size-6" />
+              <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-cream text-gold-deep">
+                <AmenityIcon name={item.icon} className="size-4" />
               </span>
-              <h3 className="mt-5 font-heading text-2xl text-ink">
-                {tx(item.title, locale)}
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted">
-                {tx(item.body, locale)}
-              </p>
+              <div className="min-w-0">
+                <h3 className="text-sm font-semibold text-ink">{tx(item.title, locale)}</h3>
+                <p className="text-xs text-muted">{tx(item.body, locale)}</p>
+              </div>
             </motion.article>
           ))}
         </motion.div>

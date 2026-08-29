@@ -27,13 +27,13 @@ export function FeatureBar() {
             <motion.div
               key={item.id}
               variants={fadeInUp}
-              className="flex items-center gap-3 border-b border-navy/6 px-5 py-5 md:border-b-0 md:border-r md:last:border-r-0"
+              className="flex items-center gap-3 border-b border-navy/6 px-4 py-4 md:border-b-0 md:border-r md:last:border-r-0"
             >
-              <span className="grid size-11 shrink-0 place-items-center rounded-full bg-warm text-gold-deep">
-                <Icon className="size-5" />
+              <span className="grid size-9 shrink-0 place-items-center rounded-full bg-warm text-gold-deep">
+                <Icon className="size-4" />
               </span>
               <div>
-                <p className="font-heading text-lg leading-none text-ink">
+                <p className="font-heading text-base leading-none text-ink">
                   {typeof item.value === "string" ? item.value : tx(item.value, locale)}
                 </p>
                 <p className="mt-1 text-sm text-muted">{tx(item.label, locale)}</p>
