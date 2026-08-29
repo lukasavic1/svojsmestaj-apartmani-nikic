@@ -20,10 +20,10 @@ const fieldClass =
   "h-12 w-full rounded-2xl border border-slate-200 bg-white py-3 pr-4 pl-11 text-sm text-ink outline-none transition focus:border-[#C5A880] focus:ring-2 focus:ring-[#C5A880]/25";
 
 const btnPrimary =
-  "inline-flex h-12 flex-1 items-center justify-center rounded-full bg-navy text-[0.72rem] font-semibold tracking-[0.12em] text-white uppercase shadow-lg shadow-navy/10 transition hover:bg-[#b38f58] hover:shadow-amber-500/20 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-35";
+  "inline-flex h-11 w-full items-center justify-center rounded-full bg-navy px-3 text-[0.65rem] font-semibold tracking-[0.1em] text-white uppercase shadow-lg shadow-navy/10 transition hover:bg-[#b38f58] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-35 sm:h-12 sm:text-[0.72rem]";
 
 const btnGhost =
-  "inline-flex h-12 flex-1 items-center justify-center rounded-full border border-navy/12 text-[0.72rem] font-semibold tracking-[0.12em] uppercase transition hover:bg-slate-50";
+  "inline-flex h-11 w-full items-center justify-center rounded-full border border-navy/12 px-3 text-[0.65rem] font-semibold tracking-[0.1em] uppercase transition hover:bg-slate-50 sm:h-12 sm:text-[0.72rem]";
 
 function Notice({ children }: { children: string }) {
   return (
@@ -227,20 +227,20 @@ export function BookingForm({
 
   return (
     <>
-      <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
+      <form ref={formRef} onSubmit={handleSubmit(onSubmit)} className="flex min-h-full flex-col">
         <ol
-          className={`sticky z-20 grid w-full grid-cols-3 gap-2 border-b border-slate-200/60 bg-white/90 px-5 py-3 backdrop-blur-md md:px-10 ${stickyTopClass}`}
+          className={`sticky z-20 grid w-full grid-cols-3 gap-1 border-b border-slate-100 bg-white/95 px-3 py-2.5 backdrop-blur-md sm:gap-2 sm:px-6 sm:py-4 ${stickyTopClass}`}
         >
           {steps.map((item) => {
             const active = step === item.n;
             const done = step > item.n;
             return (
-              <li key={item.n}>
+              <li key={item.n} className="min-w-0">
                 <button
                   type="button"
                   disabled={item.n > step}
                   onClick={() => item.n < step && setStep(item.n)}
-                  className={`flex w-full items-center justify-center gap-2 rounded-full px-3 py-2.5 text-[0.68rem] font-semibold tracking-[0.14em] uppercase transition ${
+                  className={`flex w-full min-w-0 items-center justify-center gap-1 rounded-full px-1.5 py-2 text-[0.58rem] font-semibold tracking-[0.08em] uppercase transition sm:gap-2 sm:px-3 sm:py-2.5 sm:text-[0.68rem] sm:tracking-[0.14em] ${
                     active
                       ? "bg-[#C5A880] text-navy shadow-sm"
                       : done
@@ -249,24 +249,24 @@ export function BookingForm({
                   } disabled:cursor-default`}
                 >
                   <span
-                    className={`grid size-6 place-items-center rounded-full text-[0.65rem] ${
+                    className={`grid size-5 shrink-0 place-items-center rounded-full text-[0.6rem] sm:size-6 sm:text-[0.65rem] ${
                       active || done ? "bg-navy text-white" : "bg-white text-muted"
                     }`}
                   >
                     {item.n}
                   </span>
-                  <span className="hidden truncate sm:inline">{item.label}</span>
+                  <span className="truncate">{item.label}</span>
                 </button>
               </li>
             );
           })}
         </ol>
 
-        <div className="grid gap-6 px-5 py-6 md:px-10 md:py-8">
+        <div className="grid flex-1 gap-5 px-4 py-4 pb-2 sm:gap-6 sm:px-8 sm:py-6">
           {step === 1 && !lockedApartmentId ? (
             <div>
-              <p className="mb-5 text-base text-muted">{ui.booking.selectApartment}</p>
-              <div className="grid gap-4">
+              <p className="mb-3 text-sm text-muted sm:mb-5 sm:text-base">{ui.booking.selectApartment}</p>
+              <div className="grid gap-2 sm:gap-4">
                 {apartments.map((item) => {
                   const active = apartmentId === item.id;
                   const cover = item.photos[0];
@@ -274,44 +274,45 @@ export function BookingForm({
                     <motion.button
                       key={item.id}
                       type="button"
-                      whileHover={{ scale: 1.012 }}
                       whileTap={{ scale: 0.995 }}
                       onClick={() => pickUnit(item.id)}
-                      className={`flex w-full flex-col gap-4 rounded-3xl p-3 text-left transition sm:flex-row sm:items-center sm:p-4 ${
+                      className={`flex w-full items-center gap-3 rounded-2xl p-2 text-left transition sm:gap-4 sm:rounded-3xl sm:p-4 ${
                         active
                           ? "border-2 border-[#C5A880] bg-amber-50/30 shadow-md shadow-[#C5A880]/15"
-                          : "border border-slate-200/80 bg-white hover:border-[#C5A880]/50 hover:shadow-lg hover:shadow-slate-200/50"
+                          : "border border-slate-200/80 bg-white hover:border-[#C5A880]/50"
                       }`}
                     >
-                      <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl sm:h-32 sm:w-48 sm:shrink-0 sm:aspect-auto">
+                      <div className="relative h-16 w-24 shrink-0 overflow-hidden rounded-xl sm:h-32 sm:w-48 sm:rounded-2xl">
                         {cover ? (
                           <Image
                             src={cover.src}
                             alt={tx(item.name, locale)}
                             fill
-                            sizes="(max-width: 640px) 100vw, 192px"
+                            sizes="(max-width: 640px) 96px, 192px"
                             className="object-cover"
                           />
                         ) : null}
                       </div>
-                      <div className="min-w-0 flex-1 px-1 pb-1 sm:px-0 sm:pb-0">
-                        <p className="font-heading text-xl text-ink sm:text-2xl">
+                      <div className="min-w-0 flex-1">
+                        <p className="font-heading text-base text-ink sm:text-2xl">
                           {tx(item.name, locale)}
                         </p>
-                        <p className="mt-1 line-clamp-2 text-sm text-muted">{tx(item.hook, locale)}</p>
-                        <div className="mt-3 flex flex-wrap items-center gap-2">
-                          <span className="inline-flex items-center gap-1.5 rounded-full bg-warm px-2.5 py-1 text-xs font-medium text-navy">
-                            <Maximize2 className="size-3.5" />
+                        <p className="mt-0.5 line-clamp-1 text-xs text-muted sm:mt-1 sm:line-clamp-2 sm:text-sm">
+                          {tx(item.hook, locale)}
+                        </p>
+                        <div className="mt-1.5 flex flex-wrap items-center gap-1.5 sm:mt-3 sm:gap-2">
+                          <span className="inline-flex items-center gap-1 rounded-full bg-warm px-2 py-0.5 text-[0.65rem] font-medium text-navy sm:gap-1.5 sm:px-2.5 sm:py-1 sm:text-xs">
+                            <Maximize2 className="size-3 sm:size-3.5" />
                             {item.sizeSqm} m²
                           </span>
-                          <span className="inline-flex items-center gap-1.5 rounded-full bg-warm px-2.5 py-1 text-xs font-medium text-navy">
-                            <Users className="size-3.5" />
-                            {item.capacity} {ui.apartments.capacity}
+                          <span className="inline-flex items-center gap-1 rounded-full bg-warm px-2 py-0.5 text-[0.65rem] font-medium text-navy sm:gap-1.5 sm:px-2.5 sm:py-1 sm:text-xs">
+                            <Users className="size-3 sm:size-3.5" />
+                            {item.capacity}
                           </span>
-                          <span className="inline-flex rounded-full bg-[#C5A880] px-3 py-1 text-xs font-semibold tracking-wide text-navy">
+                          <span className="inline-flex rounded-full bg-[#C5A880] px-2 py-0.5 text-[0.65rem] font-semibold text-navy sm:px-3 sm:py-1 sm:text-xs">
                             {item.fullyBooked || item.pricePerNight == null
                               ? ui.apartments.occupied
-                              : `${item.pricePerNight} € ${ui.apartments.perNight}`}
+                              : `${item.pricePerNight} €`}
                           </span>
                         </div>
                       </div>
@@ -321,16 +322,6 @@ export function BookingForm({
               </div>
               <input type="hidden" {...register("apartmentId")} />
               {errors.apartmentId ? <Notice>{errors.apartmentId.message ?? ""}</Notice> : null}
-              <div className="mt-6 flex justify-end">
-                <button
-                  type="button"
-                  onClick={() => canAdvanceDates && setStep(2)}
-                  disabled={!canAdvanceDates}
-                  className={`${btnPrimary} max-w-xs`}
-                >
-                  {ui.booking.next}
-                </button>
-              </div>
             </div>
           ) : null}
 
@@ -375,21 +366,6 @@ export function BookingForm({
               ) : null}
               {errors.checkIn ? <Notice>{errors.checkIn.message ?? ""}</Notice> : null}
               {errors.checkOut ? <Notice>{errors.checkOut.message ?? ""}</Notice> : null}
-              <div className="mt-6 flex gap-3">
-                {!lockedApartmentId ? (
-                  <button type="button" onClick={() => setStep(1)} className={btnGhost}>
-                    {ui.booking.back}
-                  </button>
-                ) : null}
-                <button
-                  type="button"
-                  onClick={() => canAdvanceDetails && setStep(3)}
-                  disabled={!canAdvanceDetails}
-                  className={btnPrimary}
-                >
-                  {ui.booking.next}
-                </button>
-              </div>
             </div>
           ) : null}
 
@@ -488,20 +464,54 @@ export function BookingForm({
                     />
                   </span>
                 </label>
-                <div className="flex flex-col gap-2 sm:flex-row">
-                  <button
-                    type="button"
-                    onClick={() => setStep(unit?.fullyBooked && !lockedApartmentId ? 1 : 2)}
-                    className={btnGhost}
-                  >
-                    {ui.booking.back}
-                  </button>
-                  <button type="submit" disabled={!canSubmit} className={btnPrimary}>
-                    {ui.booking.submit}
-                  </button>
-                </div>
               </div>
             </div>
+          ) : null}
+        </div>
+
+        <div className="sticky bottom-0 z-20 grid grid-cols-2 gap-2 border-t border-slate-100 bg-white/95 px-4 py-3 backdrop-blur-md sm:px-8">
+          {step === 1 && !lockedApartmentId ? (
+            <button
+              type="button"
+              onClick={() => canAdvanceDates && setStep(2)}
+              disabled={!canAdvanceDates}
+              className={`${btnPrimary} col-span-2`}
+            >
+              {ui.booking.next}
+            </button>
+          ) : null}
+          {step === 2 ? (
+            <>
+              {!lockedApartmentId ? (
+                <button type="button" onClick={() => setStep(1)} className={btnGhost}>
+                  {ui.booking.back}
+                </button>
+              ) : (
+                <span />
+              )}
+              <button
+                type="button"
+                onClick={() => canAdvanceDetails && setStep(3)}
+                disabled={!canAdvanceDetails}
+                className={btnPrimary}
+              >
+                {ui.booking.next}
+              </button>
+            </>
+          ) : null}
+          {step === 3 ? (
+            <>
+              <button
+                type="button"
+                onClick={() => setStep(unit?.fullyBooked && !lockedApartmentId ? 1 : 2)}
+                className={btnGhost}
+              >
+                {ui.booking.back}
+              </button>
+              <button type="submit" disabled={!canSubmit} className={btnPrimary}>
+                {ui.booking.submit}
+              </button>
+            </>
           ) : null}
         </div>
       </form>

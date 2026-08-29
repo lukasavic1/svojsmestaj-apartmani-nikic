@@ -105,9 +105,9 @@ export function ReviewsSection() {
           </div>
         </div>
 
-        <div className="-mx-4 mt-10 flex gap-4 overflow-x-auto px-4 pb-2 snap-x snap-mandatory lg:hidden">
+        <div className="mt-10 flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory lg:hidden">
           {reviews.map((review) => (
-            <div key={review.id} className="w-[85%] shrink-0 snap-start sm:w-[70%]">
+            <div key={review.id} className="w-[min(85vw,22rem)] shrink-0 snap-start">
               <ReviewCard review={review} />
             </div>
           ))}

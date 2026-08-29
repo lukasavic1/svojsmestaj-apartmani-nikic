@@ -15,6 +15,8 @@ export type UiDictionary = {
     headline: string;
     ctaApartments: string;
     ctaAvailability: string;
+    ctaApartmentsShort: string;
+    ctaAvailabilityShort: string;
     checkIn: string;
     checkOut: string;
     guests: string;
@@ -172,5 +174,21 @@ export type UiDictionary = {
     call: string;
     whatsapp: string;
     book: string;
+  };
+  contact: {
+    kicker: string;
+    heading: string;
+    lead: string;
+    hostsLabel: string;
+    addressLabel: string;
+    phoneLabel: string;
+    hoursLabel: string;
+    checkInLabel: string;
+    checkOutLabel: string;
+    callCta: string;
+    whatsappCta: string;
+    viberNote: string;
+    faqKicker: string;
+    faqHeading: string;
   };
 };

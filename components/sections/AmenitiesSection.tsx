@@ -24,13 +24,13 @@ export function AmenitiesSection() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-8% 0px" }}
-          className="mt-8 grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+          className="mt-8 flex gap-2 overflow-x-auto pb-2 snap-x snap-mandatory sm:grid sm:grid-cols-2 sm:overflow-visible sm:pb-0 lg:grid-cols-3 xl:grid-cols-4"
         >
           {highlights.map((item) => (
             <motion.article
               key={item.id}
               variants={fadeInUp}
-              className="flex items-center gap-3 rounded-2xl bg-white px-3 py-2.5 shadow-sm"
+              className="flex w-[min(78vw,18rem)] shrink-0 snap-start items-center gap-3 rounded-2xl bg-white px-3 py-2.5 shadow-sm sm:w-auto"
             >
               <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-cream text-gold-deep">
                 <AmenityIcon name={item.icon} className="size-4" />

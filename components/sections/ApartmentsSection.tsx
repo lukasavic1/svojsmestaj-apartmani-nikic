@@ -59,13 +59,14 @@ export function ApartmentsSection() {
           ))}
         </div>
 
-        <div className="mt-8 grid items-stretch gap-6 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-8 flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory sm:grid sm:grid-cols-2 sm:overflow-visible sm:pb-0 xl:grid-cols-3">
           {visible.map((unit) => (
-            <ApartmentCard
-              key={unit.id}
-              apartment={unit}
-              onOpenGallery={() => setGalleryId(unit.id)}
-            />
+            <div key={unit.id} className="w-[min(85vw,22rem)] shrink-0 snap-start sm:w-full">
+              <ApartmentCard
+                apartment={unit}
+                onOpenGallery={() => setGalleryId(unit.id)}
+              />
+            </div>
           ))}
         </div>
       </div>

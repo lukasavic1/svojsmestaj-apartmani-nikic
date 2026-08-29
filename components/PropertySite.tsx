@@ -3,7 +3,7 @@
 import { AboutSection } from "@/components/sections/AboutSection";
 import { AmenitiesSection } from "@/components/sections/AmenitiesSection";
 import { ApartmentsSection } from "@/components/sections/ApartmentsSection";
-import { BookingSection } from "@/components/sections/BookingSection";
+import { ContactFaqSection } from "@/components/sections/ContactFaqSection";
 import { FeatureBar } from "@/components/sections/FeatureBar";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { LocationSection } from "@/components/sections/LocationSection";
@@ -23,7 +23,7 @@ export function PropertySite() {
         <AmenitiesSection />
         <ReviewsSection />
         <LocationSection />
-        <BookingSection />
+        <ContactFaqSection />
       </main>
     </SiteChrome>
   );

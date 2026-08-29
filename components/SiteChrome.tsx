@@ -3,9 +3,9 @@
 import { Suspense, type ReactNode } from "react";
 import { SiteProvider } from "@/components/providers/SiteProvider";
 import { BookingModal } from "@/components/sections/BookingModal";
-import { MobileContactBar } from "@/components/sections/MobileContactBar";
 import { SiteFooter } from "@/components/sections/SiteFooter";
 import { SiteHeader } from "@/components/sections/SiteHeader";
+import { FloatingBookingButton } from "@/components/ui/FloatingBookingButton";
 
 export function SiteChrome({
   children,
@@ -17,11 +17,11 @@ export function SiteChrome({
   return (
     <Suspense fallback={null}>
       <SiteProvider>
-        <div id="top" className="min-h-dvh bg-cream pb-20 md:pb-0">
+        <div id="top" className="min-h-dvh bg-cream">
           <SiteHeader solid={solidHeader} />
           {children}
           <SiteFooter />
-          <MobileContactBar />
+          <FloatingBookingButton />
           <BookingModal />
         </div>
       </SiteProvider>

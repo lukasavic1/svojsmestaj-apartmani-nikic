@@ -89,7 +89,7 @@ export function VideoShowcaseSection() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-8% 0px" }}
-          className="-mx-4 mt-6 flex gap-4 overflow-x-auto px-4 pb-2 snap-x snap-mandatory sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0"
+          className="mt-6 flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory sm:grid sm:grid-cols-3 sm:overflow-visible sm:pb-0"
         >
           {reelVideos.map((video) => (
             <motion.button
@@ -98,7 +98,7 @@ export function VideoShowcaseSection() {
               variants={fadeInUp}
               onClick={() => setActive(video)}
               aria-label={`${ui.video.play}: ${tx(video.title, locale)}`}
-              className="group relative w-[80%] shrink-0 snap-start overflow-hidden rounded-2xl border border-transparent text-left transition hover:border-[#C5A880]/40 sm:w-auto"
+              className="group relative w-[min(80vw,20rem)] shrink-0 snap-start overflow-hidden rounded-2xl border border-transparent text-left transition hover:border-[#C5A880]/40 sm:w-auto"
             >
               <div className="relative aspect-video overflow-hidden">
                 <Image

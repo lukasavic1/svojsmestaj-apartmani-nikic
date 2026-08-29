@@ -57,7 +57,7 @@ export function BookingSuccessModal({ open, receipt, onClose }: Props) {
     <AnimatePresence>
       {open ? (
         <motion.div
-          className="fixed inset-0 z-[90] flex items-end justify-center sm:items-center sm:p-6"
+          className="fixed inset-0 z-[110] flex items-end justify-center sm:items-center sm:p-6"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}

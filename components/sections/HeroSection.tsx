@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
+import { Building2, CalendarCheck } from "lucide-react";
 import { media } from "@/data/media";
 import { site } from "@/data/site";
 import { tx } from "@/lib/i18n";
@@ -73,19 +74,26 @@ export function HeroSection() {
           >
             {tx(site.subTagline, locale)}
           </motion.p>
-          <motion.div variants={fadeInUp} className="mt-8 flex flex-wrap gap-3">
+          <motion.div
+            variants={fadeInUp}
+            className="mt-7 grid max-w-md grid-cols-2 gap-2 sm:mt-8 sm:flex sm:max-w-none sm:flex-wrap sm:gap-3"
+          >
             <a
               href="#apartmani"
-              className="inline-flex h-12 items-center rounded-full bg-gold px-6 text-[0.75rem] font-semibold tracking-[0.14em] text-navy uppercase shadow-lg shadow-gold/25 transition hover:bg-gold-deep hover:text-white"
+              className="inline-flex min-h-[4.25rem] flex-col items-center justify-center gap-1 rounded-2xl bg-gold px-3 text-[0.68rem] font-semibold tracking-[0.14em] text-navy uppercase shadow-lg shadow-gold/25 transition hover:bg-gold-deep hover:text-white sm:h-12 sm:min-h-0 sm:flex-row sm:gap-2 sm:rounded-full sm:px-6 sm:text-[0.75rem]"
             >
-              {ui.hero.ctaApartments}
+              <Building2 className="size-4 shrink-0 sm:hidden" />
+              <span className="sm:hidden">{ui.hero.ctaApartmentsShort}</span>
+              <span className="hidden sm:inline">{ui.hero.ctaApartments}</span>
             </a>
             <button
               type="button"
               onClick={() => openBooking()}
-              className="inline-flex h-12 items-center rounded-full border border-white/30 bg-white/10 px-6 text-[0.75rem] font-semibold tracking-[0.14em] uppercase backdrop-blur-md transition hover:bg-white/20"
+              className="inline-flex min-h-[4.25rem] flex-col items-center justify-center gap-1 rounded-2xl border border-white/35 bg-white/10 px-3 text-[0.68rem] font-semibold tracking-[0.14em] uppercase backdrop-blur-md transition hover:bg-white/20 sm:h-12 sm:min-h-0 sm:flex-row sm:gap-2 sm:rounded-full sm:px-6 sm:text-[0.75rem]"
             >
-              {ui.hero.ctaAvailability}
+              <CalendarCheck className="size-4 shrink-0 sm:hidden" />
+              <span className="sm:hidden">{ui.hero.ctaAvailabilityShort}</span>
+              <span className="hidden sm:inline">{ui.hero.ctaAvailability}</span>
             </button>
           </motion.div>
         </motion.div>

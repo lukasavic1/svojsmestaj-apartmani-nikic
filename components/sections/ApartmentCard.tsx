@@ -62,10 +62,10 @@ export function ApartmentCard({ apartment, onOpenGallery }: Props) {
         </span>
       </div>
       <div className="flex flex-1 flex-col p-5">
-        <p className="line-clamp-3 min-h-[4.2rem] text-sm leading-relaxed text-muted">
+        <p className="line-clamp-2 min-h-0 text-sm leading-relaxed text-muted sm:line-clamp-3 sm:min-h-[4.2rem]">
           {tx(apartment.hook, locale)}
         </p>
-        <div className="mt-3 flex min-h-[3.4rem] flex-wrap content-start gap-1.5">
+        <div className="mt-3 flex min-h-0 flex-wrap content-start gap-1.5 sm:min-h-[3.4rem]">
           {txList(apartment.tags, locale).map((tag) => (
             <span
               key={tag}
