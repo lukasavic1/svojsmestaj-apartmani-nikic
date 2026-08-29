@@ -65,7 +65,9 @@ export function PhotoCarousel({
         fill
         sizes={sizes}
         priority={priority}
-        className={`object-cover transition-transform duration-700 ${onImageClick ? "cursor-zoom-in" : "hover:scale-105"}`}
+        className={`object-cover transition-transform duration-700 ${
+          onImageClick ? "cursor-zoom-in group-hover:scale-105" : "hover:scale-105"
+        }`}
         onClick={onImageClick}
       />
       {count > 1 ? (

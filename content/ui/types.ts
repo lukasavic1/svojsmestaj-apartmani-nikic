@@ -49,6 +49,7 @@ export type UiDictionary = {
     availability: string;
     enquireThis: string;
     photoCount: string;
+    openGallery: string;
   };
   amenities: {
     kicker: string;
@@ -100,6 +101,14 @@ export type UiDictionary = {
     whatsapp: string;
     successTitle: string;
     successBody: string;
+    successCall: string;
+    successWhatsapp: string;
+    selectedRange: string;
+    estimatedTotal: string;
+    night: string;
+    nights: string;
+    summaryPeriod: string;
+    summaryGuests: string;
     close: string;
     errors: {
       name: string;
@@ -116,6 +125,20 @@ export type UiDictionary = {
     };
     note: string;
     policies: string;
+    stepApartment: string;
+    stepDates: string;
+    stepDetails: string;
+    next: string;
+    back: string;
+  };
+  video: {
+    kicker: string;
+    heading: string;
+    lead: string;
+    play: string;
+    close: string;
+    channelLead: string;
+    channelCta: string;
   };
   calendar: {
     months: string[];

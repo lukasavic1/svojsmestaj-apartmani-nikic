@@ -2,15 +2,8 @@
 
 import { Phone } from "lucide-react";
 import { telHref, whatsappHref } from "@/lib/whatsapp";
+import { WhatsAppIcon } from "@/components/ui/SocialIcons";
 import { useSite } from "@/components/providers/SiteProvider";
-
-function WhatsAppGlyph({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
-      <path d="M20.5 3.5A11 11 0 0 0 2.1 16.7L1 23l6.5-1.1A11 11 0 1 0 20.5 3.5Zm-8.5 17a9.1 9.1 0 0 1-4.6-1.3l-.3-.2-3.8.6.6-3.7-.2-.3A9.1 9.1 0 1 1 12 20.5Zm5-6.8c-.3-.1-1.6-.8-1.8-.9s-.4-.1-.6.1-.7.9-.8 1-.3.2-.6.1a7.4 7.4 0 0 1-2.2-1.4 8.2 8.2 0 0 1-1.5-1.9c-.2-.3 0-.4.1-.6l.3-.4.2-.3c.1-.1 0-.3 0-.4s-.6-1.4-.8-1.9-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3s-.8.8-.8 1.9.8 2.2.9 2.3c.1.2 1.6 2.5 3.9 3.5 1.4.6 1.9.7 2.6.6.4 0 1.3-.2 1.5-.8s.6-1.1.4-1.2Z" />
-    </svg>
-  );
-}
 
 export function MobileContactBar() {
   const { ui, openBooking } = useSite();
@@ -31,7 +24,7 @@ export function MobileContactBar() {
           rel="noreferrer"
           className="inline-flex h-12 items-center justify-center gap-1.5 rounded-full bg-[#25D366] text-[0.7rem] font-semibold tracking-[0.08em] text-white uppercase"
         >
-          <WhatsAppGlyph className="size-4" />
+          <WhatsAppIcon className="size-4" />
           {ui.mobileBar.whatsapp}
         </a>
         <button

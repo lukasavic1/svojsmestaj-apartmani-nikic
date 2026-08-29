@@ -13,9 +13,14 @@ export function BookingModal() {
       title={ui.booking.heading}
       onClose={closeBooking}
       closeLabel={ui.booking.close}
+      wide
     >
-      <p className="mb-5 text-sm text-muted">{ui.booking.lead}</p>
-      <BookingForm onSuccess={closeBooking} />
+      <div className="-mx-5 -my-5 sm:-mx-7 sm:-my-6">
+        <p className="border-b border-navy/8 px-4 py-3 text-sm text-muted sm:px-5">
+          {ui.booking.lead}
+        </p>
+        <BookingForm stickyTopClass="top-0" onSuccess={closeBooking} />
+      </div>
     </Modal>
   );
 }

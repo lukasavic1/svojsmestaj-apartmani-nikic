@@ -6,20 +6,13 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import { LanguageToggle } from "@/components/ui/LanguageToggle";
+import { WhatsAppIcon } from "@/components/ui/SocialIcons";
 import { useSite } from "@/components/providers/SiteProvider";
 import { useIsClient } from "@/hooks/useIsClient";
 import { site } from "@/data/site";
 import { media } from "@/data/media";
 import { withLang } from "@/lib/paths";
 import { whatsappHref } from "@/lib/whatsapp";
-
-function WhatsAppGlyph({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
-      <path d="M20.5 3.5A11 11 0 0 0 2.1 16.7L1 23l6.5-1.1A11 11 0 1 0 20.5 3.5Zm-8.5 17a9.1 9.1 0 0 1-4.6-1.3l-.3-.2-3.8.6.6-3.7-.2-.3A9.1 9.1 0 1 1 12 20.5Zm5-6.8c-.3-.1-1.6-.8-1.8-.9s-.4-.1-.6.1-.7.9-.8 1-.3.2-.6.1a7.4 7.4 0 0 1-2.2-1.4 8.2 8.2 0 0 1-1.5-1.9c-.2-.3 0-.4.1-.6l.3-.4.2-.3c.1-.1 0-.3 0-.4s-.6-1.4-.8-1.9-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3s-.8.8-.8 1.9.8 2.2.9 2.3c.1.2 1.6 2.5 3.9 3.5 1.4.6 1.9.7 2.6.6.4 0 1.3-.2 1.5-.8s.6-1.1.4-1.2Z" />
-    </svg>
-  );
-}
 
 function subscribeScroll(onStoreChange: () => void) {
   window.addEventListener("scroll", onStoreChange, { passive: true });
@@ -132,7 +125,7 @@ export function SiteHeader({ solid = false }: { solid?: boolean }) {
             rel="noreferrer"
             className="hidden h-11 items-center gap-2 rounded-full bg-gold px-4 text-[0.72rem] font-semibold tracking-[0.1em] text-navy uppercase shadow-lg shadow-gold/20 transition hover:bg-gold-deep hover:text-white sm:inline-flex"
           >
-            <WhatsAppGlyph className="size-3.5" />
+            <WhatsAppIcon className="size-4" />
             WhatsApp
           </a>
           <button

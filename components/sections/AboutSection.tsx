@@ -12,24 +12,7 @@ export function AboutSection() {
 
   return (
     <section id="o-nama" className="bg-cream px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
-      <div className="mx-auto grid max-w-[1200px] items-center gap-8 lg:grid-cols-2 lg:gap-12">
-        <div className="relative overflow-hidden rounded-[1.5rem] shadow-lg shadow-slate-200/40">
-          <div className="relative aspect-[16/10] w-full">
-            <Image
-              src={media.about}
-              alt="Apartmani Nikić, Lepetane"
-              fill
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover"
-            />
-          </div>
-          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy/80 to-transparent p-5 text-white">
-            <p className="text-[0.68rem] tracking-[0.18em] text-gold uppercase">
-              {ui.about.hostsLabel}
-            </p>
-            <p className="mt-1 font-heading text-xl">{tx(site.hosts, locale)}</p>
-          </div>
-        </div>
+      <div className="mx-auto grid max-w-[1200px] items-center gap-10 lg:grid-cols-2 lg:gap-14">
         <div>
           <SectionHeading
             kicker={ui.about.kicker}
@@ -41,6 +24,20 @@ export function AboutSection() {
               <p key={paragraph}>{paragraph}</p>
             ))}
           </div>
+          <p className="mt-6 text-[0.68rem] tracking-[0.18em] text-gold-deep uppercase">
+            {ui.about.hostsLabel}
+          </p>
+          <p className="mt-1 font-heading text-xl text-ink">{tx(site.hosts, locale)}</p>
+        </div>
+        <div className="relative aspect-[4/5] overflow-hidden rounded-3xl shadow-xl shadow-slate-300/40 lg:aspect-[5/6]">
+          <Image
+            src={media.about}
+            alt={tx(site.tagline, locale)}
+            fill
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            className="object-cover"
+            priority
+          />
         </div>
       </div>
     </section>

@@ -8,6 +8,7 @@ import { FeatureBar } from "@/components/sections/FeatureBar";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { LocationSection } from "@/components/sections/LocationSection";
 import { ReviewsSection } from "@/components/sections/ReviewsSection";
+import { VideoShowcaseSection } from "@/components/sections/VideoShowcaseSection";
 import { SiteChrome } from "@/components/SiteChrome";
 
 export function PropertySite() {
@@ -17,10 +18,11 @@ export function PropertySite() {
         <HeroSection />
         <FeatureBar />
         <AboutSection />
+        <VideoShowcaseSection />
         <ApartmentsSection />
         <AmenitiesSection />
-        <LocationSection />
         <ReviewsSection />
+        <LocationSection />
         <BookingSection />
       </main>
     </SiteChrome>

@@ -9,7 +9,7 @@ import { tx } from "@/lib/i18n";
 import { easeOutExpo, fadeInUp, stagger } from "@/lib/motion";
 import { useSite } from "@/components/providers/SiteProvider";
 
-const SLIDES = media.home;
+const SLIDES = media.home.slice(1);
 
 export function HeroSection() {
   const { locale, ui, openBooking } = useSite();

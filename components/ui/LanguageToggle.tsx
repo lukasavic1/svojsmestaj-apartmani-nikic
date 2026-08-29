@@ -19,9 +19,12 @@ function Flag({ locale }: { locale: Locale }) {
   }
   return (
     <svg className="h-3 w-4 shrink-0 overflow-hidden rounded-[2px]" viewBox="0 0 16 12" aria-hidden="true">
-      <rect width="16" height="4" fill="#c6363c" />
-      <rect y="4" width="16" height="4" fill="#0c4076" />
-      <rect y="8" width="16" height="4" fill="#fff" />
+      <rect width="16" height="12" fill="#C40318" />
+      <path
+        fill="#D4AF2A"
+        d="M8 2.1c.55.05 1.15.45 1.55 1.05.35-.4.85-.65 1.35-.55.1.95-.25 1.7-.85 2.2.45.2.8.55 1 .95H5.95c.2-.4.55-.75 1-.95-.6-.5-.95-1.25-.85-2.2.5-.1 1 .15 1.35.55C6.85 2.55 7.45 2.15 8 2.1Zm-2.35 3.95h4.7c.15.85-.2 1.45-.85 1.85L8 9.1l-1.5-1.2c-.65-.4-1-1-.85-1.85Z"
+      />
+      <circle cx="8" cy="4.55" r=".45" fill="#C40318" />
     </svg>
   );
 }

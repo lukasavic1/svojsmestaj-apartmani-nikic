@@ -27,6 +27,89 @@ type Props = {
   selectable?: boolean;
 };
 
+function MonthGrid({
+  year,
+  month,
+  availability,
+  checkIn,
+  checkOut,
+  selectable,
+  today,
+  labelledBy,
+  onPick,
+}: {
+  year: number;
+  month: number;
+  availability: AvailabilityPayload;
+  checkIn: string | null;
+  checkOut: string | null;
+  selectable: boolean;
+  today: string;
+  labelledBy: string;
+  onPick: (iso: string, booked: boolean) => void;
+}) {
+  const { ui } = useSite();
+  const totalDays = daysInMonth(year, month);
+  const offset = mondayOffset(year, month);
+
+  return (
+    <div>
+      <h3 id={labelledBy} className="mb-3 font-heading text-xl text-ink">
+        {ui.calendar.months[month]} {year}.
+      </h3>
+      <div className="grid grid-cols-7 gap-1.5" role="grid" aria-labelledby={labelledBy}>
+        {ui.calendar.days.map((d, i) => (
+          <div
+            className="pb-1 text-center text-[0.68rem] font-semibold tracking-wide text-muted uppercase"
+            role="columnheader"
+            key={`${labelledBy}-${d}-${i}`}
+          >
+            {d}
+          </div>
+        ))}
+        {Array.from({ length: offset }, (_, i) => (
+          <div key={`${labelledBy}-e-${i}`} />
+        ))}
+        {Array.from({ length: totalDays }, (_, i) => {
+          const day = i + 1;
+          const iso = toIsoDate(year, month, day);
+          const booked = isDayBooked(availability.booked, year, month, day);
+          const past = compareIso(iso, today) < 0;
+          const disabled = booked || past || !selectable;
+          const inRange = isInRange(iso, checkIn, checkOut);
+          const endpoint = isRangeEndpoint(iso, checkIn, checkOut);
+
+          return (
+            <button
+              key={iso}
+              type="button"
+              role="gridcell"
+              disabled={disabled}
+              aria-label={`${day}. ${ui.calendar.months[month]} — ${
+                booked ? ui.calendar.busy : ui.calendar.free
+              }`}
+              onClick={() => onPick(iso, booked)}
+              className={`grid min-h-11 w-full place-items-center rounded-xl text-sm font-semibold transition sm:min-h-12 ${
+                booked
+                  ? "cursor-not-allowed bg-slate-100 text-slate-400 line-through"
+                  : past
+                    ? "cursor-not-allowed text-slate-300"
+                    : endpoint
+                      ? "bg-slate-900 text-white shadow-sm"
+                      : inRange
+                        ? "bg-slate-900/10 text-slate-900"
+                        : "border border-emerald-200 bg-emerald-50 text-emerald-900 hover:bg-emerald-100"
+              }`}
+            >
+              {day}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export function RangeCalendar({
   availability,
   checkIn,
@@ -44,14 +127,15 @@ export function RangeCalendar({
     setError(null);
   }, [availability.unitId, availability.first.year, availability.first.month]);
 
-  const { year, month } = cursor;
-  const totalDays = daysInMonth(year, month);
-  const offset = mondayOffset(year, month);
+  const nextMonth = shiftMonth(cursor, 1);
   const atFirst =
-    asMonthIndex(year, month) <=
+    asMonthIndex(cursor.year, cursor.month) <=
     asMonthIndex(availability.first.year, availability.first.month);
   const atLast =
-    asMonthIndex(year, month) >=
+    asMonthIndex(cursor.year, cursor.month) >=
+    asMonthIndex(availability.last.year, availability.last.month);
+  const showSecond =
+    asMonthIndex(nextMonth.year, nextMonth.month) <=
     asMonthIndex(availability.last.year, availability.last.month);
 
   const hint = useMemo(() => {
@@ -91,107 +175,82 @@ export function RangeCalendar({
   };
 
   return (
-    <div className="rounded-2xl border border-navy/8 bg-cream/80 p-3 sm:p-4">
-      <div className="flex items-center justify-between gap-3">
-        <h3 id="range-cal-month" className="font-heading text-lg text-ink">
-          {ui.calendar.months[month]} {year}.
-        </h3>
-        <div className="flex gap-1">
-          <button
-            type="button"
-            onClick={() => setCursor(shiftMonth(cursor, -1))}
-            disabled={atFirst}
-            aria-label={ui.calendar.prevMonth}
-            className="grid size-9 place-items-center rounded-full border border-navy/10 text-ink disabled:opacity-30"
-          >
-            ‹
-          </button>
-          <button
-            type="button"
-            onClick={() => setCursor(shiftMonth(cursor, 1))}
-            disabled={atLast}
-            aria-label={ui.calendar.nextMonth}
-            className="grid size-9 place-items-center rounded-full border border-navy/10 text-ink disabled:opacity-30"
-          >
-            ›
-          </button>
-        </div>
+    <div className="w-full rounded-3xl border border-slate-200/70 bg-white/80 p-4 sm:p-6">
+      <div className="mb-4 flex items-center justify-end gap-2">
+        <button
+          type="button"
+          onClick={() => setCursor(shiftMonth(cursor, -1))}
+          disabled={atFirst}
+          aria-label={ui.calendar.prevMonth}
+          className="grid size-10 place-items-center rounded-full border border-navy/10 text-lg text-ink disabled:opacity-30"
+        >
+          ‹
+        </button>
+        <button
+          type="button"
+          onClick={() => setCursor(shiftMonth(cursor, 1))}
+          disabled={atLast}
+          aria-label={ui.calendar.nextMonth}
+          className="grid size-10 place-items-center rounded-full border border-navy/10 text-lg text-ink disabled:opacity-30"
+        >
+          ›
+        </button>
       </div>
 
-      {hint ? <p className="mt-2 text-xs text-muted">{hint}</p> : null}
+      {hint ? (
+        <p className="mb-4 rounded-xl border border-[#C5A880]/60 bg-[#C5A880]/12 px-3 py-2 text-sm font-medium text-ink">
+          {hint}
+        </p>
+      ) : null}
       {error ? (
-        <p className="mt-2 text-xs text-red-700" role="alert">
+        <p
+          className="mb-4 rounded-xl border border-red-400 bg-red-50 px-3 py-2 text-sm font-medium text-red-800"
+          role="alert"
+        >
           {error}
         </p>
       ) : null}
 
-      <div
-        className="mt-3 grid grid-cols-7 gap-0.5"
-        role="grid"
-        aria-labelledby="range-cal-month"
-      >
-        {ui.calendar.days.map((d, i) => (
-          <div
-            className="pb-1 text-center text-[0.65rem] font-semibold tracking-wide text-muted uppercase"
-            role="columnheader"
-            key={`${d}-${i}`}
-          >
-            {d}
+      <div className="grid gap-8 lg:grid-cols-2">
+        <MonthGrid
+          year={cursor.year}
+          month={cursor.month}
+          availability={availability}
+          checkIn={checkIn}
+          checkOut={checkOut}
+          selectable={selectable}
+          today={today}
+          labelledBy="range-cal-month-a"
+          onPick={pick}
+        />
+        {showSecond ? (
+          <div className="hidden lg:block">
+            <MonthGrid
+              year={nextMonth.year}
+              month={nextMonth.month}
+              availability={availability}
+              checkIn={checkIn}
+              checkOut={checkOut}
+              selectable={selectable}
+              today={today}
+              labelledBy="range-cal-month-b"
+              onPick={pick}
+            />
           </div>
-        ))}
-
-        {Array.from({ length: offset }, (_, i) => (
-          <div key={`e-${i}`} />
-        ))}
-
-        {Array.from({ length: totalDays }, (_, i) => {
-          const day = i + 1;
-          const iso = toIsoDate(year, month, day);
-          const booked = isDayBooked(availability.booked, year, month, day);
-          const past = compareIso(iso, today) < 0;
-          const disabled = booked || past || !selectable;
-          const inRange = isInRange(iso, checkIn, checkOut);
-          const endpoint = isRangeEndpoint(iso, checkIn, checkOut);
-
-          return (
-            <button
-              key={iso}
-              type="button"
-              role="gridcell"
-              disabled={disabled}
-              aria-label={`${day}. ${ui.calendar.months[month]} — ${
-                booked ? ui.calendar.busy : ui.calendar.free
-              }`}
-              onClick={() => pick(iso, booked)}
-              className={`grid aspect-square place-items-center rounded-lg text-xs font-medium transition ${
-                booked
-                  ? "bg-[#eaadad]/80 text-ink/70 line-through"
-                  : past
-                    ? "text-ink/30"
-                    : endpoint
-                      ? "bg-navy text-white"
-                      : inRange
-                        ? "bg-navy/15 text-navy"
-                        : "bg-[#81d742]/25 text-ink hover:bg-[#81d742]/45"
-              }`}
-            >
-              {day}
-            </button>
-          );
-        })}
+        ) : null}
       </div>
 
-      <div className="mt-4 flex flex-wrap gap-4 text-xs text-muted">
+      <div className="mt-5 flex flex-wrap gap-5 text-xs text-muted">
         <span className="inline-flex items-center gap-1.5">
-          <i className="size-2.5 rounded-full bg-[#81d742]" aria-hidden="true" />
+          <i className="size-3 rounded-md border border-emerald-200 bg-emerald-50" aria-hidden="true" />
           {ui.calendar.free}
         </span>
         <span className="inline-flex items-center gap-1.5">
-          <i className="size-2.5 rounded-full bg-[#eaadad]" aria-hidden="true" />
+          <i className="size-3 rounded-md bg-slate-100" aria-hidden="true" />
           {ui.calendar.busy}
         </span>
         <span className="inline-flex items-center gap-1.5">
-          <i className="size-2.5 rounded-full bg-navy" aria-hidden="true" />
+          <i className="size-3 rounded-md bg-slate-900" aria-hidden="true" />
           {ui.calendar.selected}
         </span>
       </div>

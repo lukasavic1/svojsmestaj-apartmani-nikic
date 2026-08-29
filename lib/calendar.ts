@@ -41,6 +41,12 @@ export function compareIso(a: string, b: string): number {
   return a < b ? -1 : a > b ? 1 : 0;
 }
 
+export function formatLongDate(iso: string, months: readonly string[]): string {
+  const d = parseIsoDate(iso);
+  if (!d) return iso;
+  return `${d.day}. ${months[d.month]} ${d.year}`;
+}
+
 export function nightsBetween(checkIn: string, checkOut: string): number {
   const a = parseIsoDate(checkIn);
   const b = parseIsoDate(checkOut);

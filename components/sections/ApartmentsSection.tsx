@@ -59,7 +59,7 @@ export function ApartmentsSection() {
           ))}
         </div>
 
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-8 grid items-stretch gap-6 sm:grid-cols-2 xl:grid-cols-3">
           {visible.map((unit) => (
             <ApartmentCard
               key={unit.id}

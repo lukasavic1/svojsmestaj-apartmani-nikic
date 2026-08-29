@@ -29,8 +29,8 @@ export const metadata: Metadata = {
   description,
   metadataBase: new URL(siteConfig.url),
   icons: {
-    icon: [{ url: media.icon }],
-    apple: [{ url: media.icon }],
+    icon: [{ url: media.logo, type: "image/png" }],
+    apple: [{ url: media.logo }],
   },
   openGraph: {
     type: "website",
